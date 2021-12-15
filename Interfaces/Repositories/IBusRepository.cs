@@ -16,11 +16,13 @@ namespace BusManagementSystem.Interfaces
 
         List<Bus> GetAll();
 
+        Bus GetByRegistrationNumber(string registrationNumber);
+
         List<Bus> GetAvailableBuses();
 
-        Bus Update(int id, Bus bus);
+        Bus Update(Bus bus);
 
-        void Delete(string regNumber);
+        void Delete(Bus bus);
 
         bool ExistById(int id);
 

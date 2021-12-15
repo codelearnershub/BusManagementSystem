@@ -1,5 +1,6 @@
 ﻿using BusManagementSystem.DTOS;
 using BusManagementSystem.Entities;
+using BusManagementSystem.Exceptions;
 using BusManagementSystem.Interfaces.Services;
 using BusManagementSystem.Repositories;
 using System;
@@ -21,17 +22,39 @@ namespace BusManagementSystem.Services
 
         public bool ChangeAvailabilityStatus(string regNumber, bool availabilityStatus)
         {
-            throw new NotImplementedException();
+            var bus = _busRepository.GetByRegistrationNumber(regNumber);
+            if (bus == null)
+            {
+                throw new NotFoundException($"Bus with Registration Number {regNumber} does not exist");
+            }
+            bus.AvailabilityStatus = availabilityStatus;
+            _busRepository.Update(bus);
+            return true;
+
         }
 
         public bool ChangeTripStatus(string regNumber, bool tripStatus)
         {
-            throw new NotImplementedException();
+            var bus = _busRepository.GetByRegistrationNumber(regNumber);
+            if (bus == null)
+            {
+                throw new NotFoundException($" the bus  with registrationnumber{regNumber} does not exits");
+
+            }
+            bus.TripStatus = tripStatus;
+            _busRepository.Update(bus);
+            return true;
         }
 
         public bool Delete(string regNumber)
         {
-            throw new NotImplementedException();
+            var bus = _busRepository.GetByRegistrationNumber(regNumber);
+            if(bus == null)
+            {
+                throw new NotFoundException($"The registration entered{regNumber} does not exist");
+            }
+            _busRepository.Delete(bus);
+            return true;
         }
 
         public BusDto GetById(int id)
@@ -54,14 +77,42 @@ namespace BusManagementSystem.Services
 
         }
 
-        public Bus GetByRegNumber(string RegNumber)
+        public BusDto GetByRegNumber(string RegNumber)
         {
-            throw new NotImplementedException();
+            var bus = _busRepository.GetByRegistrationNumber(RegNumber);
+            if(bus == null)
+            {
+                throw new NotFoundException($"Bus with {RegNumber} not found");
+            }
+            BusDto busDto = new BusDto
+            {
+                AvailabilityStatus = bus.AvailabilityStatus,
+                BusType = bus.BusType,
+                Capacity = bus.Capacity,
+                Model = bus.Model,
+                PlateNumber = bus.PlateNumber,
+                TripStatus = bus.TripStatus,
+                Id = bus.Id,
+                RegistrationNumber = bus.RegistrationNumber
+
+            };
+            return busDto;
         }
 
-        public IList<Bus> List()
+        public IList<BusDto> List()
         {
-            throw new NotImplementedException();
+            var buses = _busRepository.GetAll().Select(bus => new BusDto
+            {
+                AvailabilityStatus = bus.AvailabilityStatus,
+                BusType = bus.BusType,
+                Capacity = bus.Capacity,
+                Model = bus.Model,
+                PlateNumber = bus.PlateNumber,
+                TripStatus = bus.TripStatus,
+                Id = bus.Id,
+                RegistrationNumber = bus.RegistrationNumber
+            }).ToList();
+            return buses;
         }
 
         public bool Register(CreateBusRequestModel model)
@@ -80,9 +131,17 @@ namespace BusManagementSystem.Services
             return true;
         }
 
-        public bool Update(Bus bus, string regNumber)
+        public bool Update(string regNumber, UpdateBusRequestModel model)
         {
-            throw new NotImplementedException();
+            var bus = _busRepository.GetByRegistrationNumber(regNumber);
+            if(bus == null)
+            {
+                throw new NotFoundException($"Bus with Registration Number {regNumber} does not exist");
+            }
+            bus.BusType = model.BusType;
+            bus.PlateNumber = model.PlateNumber;
+            _busRepository.Update(bus);
+            return true;
         }
     }
 }

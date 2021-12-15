@@ -10,9 +10,9 @@ namespace BusManagementSystem.Interfaces.Services
 {
     interface IBusService
     {
-        public bool Register(CreateBusRequestModel bus);
+        public bool Register(CreateBusRequestModel model);
 
-        public bool Update(Bus bus, string regNumber);
+        public bool Update(string regNumber, UpdateBusRequestModel model);
 
         public bool ChangeTripStatus(string regNumber, bool tripStatus);
 
@@ -20,11 +20,11 @@ namespace BusManagementSystem.Interfaces.Services
 
         public bool Delete(string regNumber);
 
-        public IList<Bus> List();
+        public IList<BusDto> List();
 
         public BusDto GetById(int id);
 
-        public Bus GetByRegNumber(string RegNumber);
+        public BusDto GetByRegNumber(string RegNumber);
 
     }
 }

@@ -28,18 +28,12 @@ namespace BusManagementSystem.Repositories
         }
 
 
-        public void Delete(string regNumber)
+        public void Delete(Bus bus)
         {
-            var bus = _context.Buses.SingleOrDefault(b => b.RegistrationNumber == regNumber);
-            if(bus == null)
-            {
-                throw new NotFoundException($"Bus with registration Number: {regNumber} does not exist.");
-            }
-            else
-            {
+            
                 _context.Buses.Remove(bus);
                 _context.SaveChanges();
-            }
+            
         }
 
         public bool ExistById(int id)
@@ -69,26 +63,18 @@ namespace BusManagementSystem.Repositories
             return bus;
         }
 
-        public Bus Update(int id, Bus bus)
+        public Bus GetByRegistrationNumber(string registrationNumber)
         {
-            var buss = _context.Buses.Find(id);
-            if (buss == null)
-            {
-                throw new NotFoundException($"Bus with id: {id} does not exist.");
-            }
-            else
-            {
-                buss.Model= bus.Model;
-                buss.PlateNumber = bus.PlateNumber;
-                buss.RegistrationNumber = bus.RegistrationNumber;
-                buss.AvailabilityStatus= bus.AvailabilityStatus;
-                buss.BusType = bus.BusType;
-                buss.Capacity = bus.Capacity;
-                buss.TripStatus = bus.TripStatus;
-            }
-            _context.Buses.Update(buss);
+            var bus = _context.Buses.SingleOrDefault(x => x.RegistrationNumber == registrationNumber);
+
+            return bus;
+        }
+
+        public Bus Update(Bus bus)
+        {
+            _context.Buses.Update(bus);
             _context.SaveChanges();
-            return buss;
+            return bus;
         }
     }
 }

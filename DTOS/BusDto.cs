@@ -36,4 +36,11 @@ namespace BusManagementSystem.DTOS
 
         public int Capacity { get; set; }
     }
+
+    public class UpdateBusRequestModel
+    {
+        public BusType BusType { get; set; }
+
+        public string PlateNumber { get; set; }
+    }
 }
