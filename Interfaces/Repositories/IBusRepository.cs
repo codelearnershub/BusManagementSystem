@@ -12,7 +12,7 @@ namespace BusManagementSystem.Interfaces
     {
         Bus Create(Bus bus);
 
-        Bus GetBus(int id);
+        Bus Get(int id);
 
         List<Bus> GetAll();
 
@@ -20,10 +20,10 @@ namespace BusManagementSystem.Interfaces
 
         Bus Update(int id, Bus bus);
 
-        void Delete(int id);
+        void Delete(string regNumber);
 
-        bool Exist(int id);
+        bool ExistById(int id);
 
-        bool Exist(string regNum);
+        bool ExistByRegNumber(string regNum);
     }
 }
