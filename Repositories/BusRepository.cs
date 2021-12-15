@@ -1,6 +1,7 @@
 ﻿using BusManagementSystem.Context;
 using BusManagementSystem.Entities;
 using BusManagementSystem.Enums;
+using BusManagementSystem.Exceptions;
 using BusManagementSystem.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -26,18 +27,33 @@ namespace BusManagementSystem.Repositories
             return bus;
         }
 
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DeleteBus(int id)
         {
             var bus = _context.Buses.Find(id);
             if(bus == null)
             {
-                throw new KeyNotFoundException($"Bus with id: {id} does not exist.");
+                throw new NotFoundException($"Bus with id: {id} does not exist.");
             }
             else
             {
                 _context.Buses.Remove(bus);
                 _context.SaveChanges();
             }
+        }
+
+        public bool Exist(int id)
+        {
+            return _context.Buses.Any(b => b.Id == id);
+        }
+
+        public bool Exist(string regNum)
+        {
+            return _context.Buses.Any(b => b.RegistrationNumber == regNum);
         }
 
         public List<Bus> GetAll()
@@ -55,22 +71,35 @@ namespace BusManagementSystem.Repositories
             var bus = _context.Buses.Find(id);
             if (bus == null)
             {
-                throw new KeyNotFoundException($"Bus with id: {id} does not exist.");
+                throw new NotFoundException($"Bus with id: {id} does not exist.");
             }
             return bus;
         }
 
-        public Bus Update(Bus bus)
+        public Bus Update(int id, Bus bus)
         {
-            var b = _context.Buses.Find(bus.Id);
-            if (b == null)
+            var buss = _context.Buses.Find(id);
+            if (buss == null)
             {
-                throw new KeyNotFoundException($"Bus with id: {bus.Id} does not exist.");
+                throw new NotFoundException($"Bus with id: {id} does not exist.");
             }
-            _context.Update(bus);
+            else
+            {
+                buss.Model= bus.Model;
+                buss.PlateNumber = bus.PlateNumber;
+                buss.RegistrationNumber = bus.RegistrationNumber;
+                buss.AvailabilityStatus= bus.AvailabilityStatus;
+                buss.BusType = bus.BusType;
+                buss.Capacity = bus.Capacity;
+                buss.TripStatus = bus.TripStatus;
+            }
+
+            _context.Buses.Update(buss);
             _context.SaveChanges();
-            return bus;
+            return buss;
 
         }
+
+
     }
 }

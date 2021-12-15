@@ -18,8 +18,12 @@ namespace BusManagementSystem.Interfaces
 
         List<Bus> GetAvailableBuses();
 
-        Bus Update(Bus bus);
+        Bus Update(int id, Bus bus);
 
-        void DeleteBus(int id);
+        void Delete(int id);
+
+        bool Exist(int id);
+
+        bool Exist(string regNum);
     }
 }
