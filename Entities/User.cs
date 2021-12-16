@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusManagementSystem.Entities
 {
-    public class User
+    public abstract class User
     {
         public int Id { get; set; }
 
@@ -22,7 +22,5 @@ namespace BusManagementSystem.Entities
         public string PhoneNumber { get; set; }
 
         public string Address { get; set; }
-
-        public UserType UserType { get; set; }
     }
 }

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211214121356_initialMigration")]
-    partial class initialMigration
+    [Migration("20211216102140_second")]
+    partial class second
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,6 +18,35 @@ namespace BusManagementSystem.Migrations
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.12");
+
+            modelBuilder.Entity("BusManagementSystem.Entities.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+                });
 
             modelBuilder.Entity("BusManagementSystem.Entities.Booking", b =>
                 {
@@ -31,13 +60,13 @@ namespace BusManagementSystem.Migrations
                     b.Property<int>("BookingStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsPaid")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<int>("NumberOfPassenger")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PassengerId")
                         .HasColumnType("int");
 
                     b.Property<int>("TripId")
@@ -45,7 +74,7 @@ namespace BusManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("PassengerId");
 
                     b.HasIndex("TripId");
 
@@ -84,43 +113,7 @@ namespace BusManagementSystem.Migrations
                     b.ToTable("Buses");
                 });
 
-            modelBuilder.Entity("BusManagementSystem.Entities.Trip", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("BusId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DriverId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LandingPoint")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LandingTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<int>("TakeOffPoint")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TakeOffTime")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusId");
-
-                    b.HasIndex("DriverId");
-
-                    b.ToTable("Trips");
-                });
-
-            modelBuilder.Entity("BusManagementSystem.Entities.User", b =>
+            modelBuilder.Entity("BusManagementSystem.Entities.Driver", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -144,29 +137,97 @@ namespace BusManagementSystem.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
-                    b.Property<int>("UserType")
+                    b.HasKey("Id");
+
+                    b.ToTable("Drivers");
+                });
+
+            modelBuilder.Entity("BusManagementSystem.Entities.Passenger", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Passengers");
+                });
+
+            modelBuilder.Entity("BusManagementSystem.Entities.Trip", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("BusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DriverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LandingPoint")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LandingTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TakeOffPoint")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TakeOffTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("TripReference")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusId");
+
+                    b.HasIndex("DriverId");
+
+                    b.ToTable("Trips");
                 });
 
             modelBuilder.Entity("BusManagementSystem.Entities.Booking", b =>
                 {
-                    b.HasOne("BusManagementSystem.Entities.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
+                    b.HasOne("BusManagementSystem.Entities.Passenger", "Passenger")
+                        .WithMany("Bookings")
+                        .HasForeignKey("PassengerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BusManagementSystem.Entities.Trip", "Trip")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("Passenger");
 
                     b.Navigation("Trip");
                 });
@@ -179,8 +240,8 @@ namespace BusManagementSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BusManagementSystem.Entities.User", "Driver")
-                        .WithMany()
+                    b.HasOne("BusManagementSystem.Entities.Driver", "Driver")
+                        .WithMany("Trips")
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -193,6 +254,21 @@ namespace BusManagementSystem.Migrations
             modelBuilder.Entity("BusManagementSystem.Entities.Bus", b =>
                 {
                     b.Navigation("Trips");
+                });
+
+            modelBuilder.Entity("BusManagementSystem.Entities.Driver", b =>
+                {
+                    b.Navigation("Trips");
+                });
+
+            modelBuilder.Entity("BusManagementSystem.Entities.Passenger", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("BusManagementSystem.Entities.Trip", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

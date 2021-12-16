@@ -24,6 +24,8 @@ namespace BusManagementSystem.DTOS
         public bool AvailabilityStatus { get; set; }
 
         public bool TripStatus { get; set; }
+
+        public List<TripDto> Trips { get; set; } 
     }
 
     public class CreateBusRequestModel

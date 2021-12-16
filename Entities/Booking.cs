@@ -15,9 +15,9 @@ namespace BusManagementSystem.Entities
 
         public int NumberOfPassenger { get; set; }
 
-        public int CustomerId { get; set; }
+        public int PassengerId { get; set; }
 
-        public User Customer { get; set; }
+        public Passenger Passenger { get; set; }
 
         public int TripId { get; set; }
 

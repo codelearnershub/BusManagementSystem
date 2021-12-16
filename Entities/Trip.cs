@@ -11,6 +11,8 @@ namespace BusManagementSystem.Entities
     {
         public int Id { get; set; }
 
+        public string TripReference { get; set; }
+
         public int BusId { get; set; }
 
         public Bus Bus { get; set; }
@@ -25,8 +27,12 @@ namespace BusManagementSystem.Entities
 
         public int DriverId { get; set; }
 
-        public User Driver { get; set; }
+        public Driver Driver { get; set; }
 
         public decimal Price { get; set; }
+
+        public TripStatus Status { get; set; }
+
+        public virtual List<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }

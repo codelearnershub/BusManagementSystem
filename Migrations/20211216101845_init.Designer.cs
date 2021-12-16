@@ -3,48 +3,21 @@ using System;
 using BusManagementSystem.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BusManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211216101845_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.12");
-
-            modelBuilder.Entity("BusManagementSystem.Entities.Admin", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Admins");
-                });
 
             modelBuilder.Entity("BusManagementSystem.Entities.Booking", b =>
                 {
@@ -111,67 +84,6 @@ namespace BusManagementSystem.Migrations
                     b.ToTable("Buses");
                 });
 
-            modelBuilder.Entity("BusManagementSystem.Entities.Driver", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LicenseNumber")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Drivers");
-                });
-
-            modelBuilder.Entity("BusManagementSystem.Entities.Passenger", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Passengers");
-                });
-
             modelBuilder.Entity("BusManagementSystem.Entities.Trip", b =>
                 {
                     b.Property<int>("Id")
@@ -212,6 +124,55 @@ namespace BusManagementSystem.Migrations
                     b.HasIndex("DriverId");
 
                     b.ToTable("Trips");
+                });
+
+            modelBuilder.Entity("BusManagementSystem.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+                });
+
+            modelBuilder.Entity("BusManagementSystem.Entities.Driver", b =>
+                {
+                    b.HasBaseType("BusManagementSystem.Entities.User");
+
+                    b.HasDiscriminator().HasValue("Driver");
+                });
+
+            modelBuilder.Entity("BusManagementSystem.Entities.Passenger", b =>
+                {
+                    b.HasBaseType("BusManagementSystem.Entities.User");
+
+                    b.HasDiscriminator().HasValue("Passenger");
                 });
 
             modelBuilder.Entity("BusManagementSystem.Entities.Booking", b =>
@@ -257,17 +218,17 @@ namespace BusManagementSystem.Migrations
                     b.Navigation("Trips");
                 });
 
+            modelBuilder.Entity("BusManagementSystem.Entities.Trip", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
             modelBuilder.Entity("BusManagementSystem.Entities.Driver", b =>
                 {
                     b.Navigation("Trips");
                 });
 
             modelBuilder.Entity("BusManagementSystem.Entities.Passenger", b =>
-                {
-                    b.Navigation("Bookings");
-                });
-
-            modelBuilder.Entity("BusManagementSystem.Entities.Trip", b =>
                 {
                     b.Navigation("Bookings");
                 });
