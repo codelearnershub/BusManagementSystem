@@ -22,5 +22,7 @@ namespace BusManagementSystem.Entities
         public string PhoneNumber { get; set; }
 
         public string Address { get; set; }
+
+        public UserType UserType { get; set; }
     }
 }

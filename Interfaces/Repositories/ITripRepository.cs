@@ -27,6 +27,8 @@ namespace BusManagementSystem.Interfaces.Repositories
 
         public List<TripDto> GetTripsByDateAndLocation(Location from, Location to, DateTime date);
 
+        public List<TripDto> GetAvailableTrips(Location from, Location to, DateTime date);
+
         public List<TripDto> GetTripsByDriver(int driverId);
 
         public List<TripDto> GetInitialisedTrips();

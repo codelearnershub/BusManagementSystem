@@ -116,6 +116,7 @@ namespace BusManagementSystem.Services
                 LandingTime = model.LandingTime,
                 TakeOffPoint = model.TakeOffPoint,
                 TakeOffTime = model.TakeOffTime,
+                AvailableSeat = bus.Capacity,
                 TripReference = Guid.NewGuid().ToString().Substring(0, 10).Replace("-", "").ToUpper(),
                 Price = model.Price,
                 Status = TripStatus.Initialize
@@ -132,6 +133,11 @@ namespace BusManagementSystem.Services
         }
 
         public TripDto UpdateTripStatus(string tripReferenceNumber, TripStatus tripStatus)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TripDto> GetAvailableTrips(Location from, Location to, DateTime date)
         {
             throw new NotImplementedException();
         }

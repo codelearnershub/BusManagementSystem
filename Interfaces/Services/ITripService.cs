@@ -23,6 +23,8 @@ namespace BusManagementSystem.Interfaces.Services
 
         List<TripDto> GetTripsByDateAndLocation(Location from, Location to, DateTime date);
 
+        List<TripDto> GetAvailableTrips(Location from, Location to, DateTime date);
+
         List<TripDto> GetCancelledTripsByDate(DateTime date);
 
         List<TripDto> GetCompletedTrips();

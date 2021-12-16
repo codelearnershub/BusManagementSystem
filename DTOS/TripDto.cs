@@ -19,6 +19,8 @@ namespace BusManagementSystem.DTOS
 
         public string BusRegistrationNumber { get; set; }
 
+        public int AvailableSeat { get; set; }
+
         public Location TakeOffPoint { get; set; }
 
         public Location LandingPoint { get; set; }

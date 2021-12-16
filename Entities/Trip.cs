@@ -33,6 +33,8 @@ namespace BusManagementSystem.Entities
 
         public TripStatus Status { get; set; }
 
+        public int AvailableSeat { get; set; }
+
         public virtual List<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }

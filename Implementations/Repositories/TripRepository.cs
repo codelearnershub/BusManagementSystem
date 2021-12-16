@@ -64,6 +64,7 @@ namespace BusManagementSystem.Repositories
                 BusId = trip.BusId,
                 BusModel = trip.Bus.Model,
                 BusRegistrationNumber = trip.Bus.RegistrationNumber,
+                AvailableSeat = trip.AvailableSeat,
                 LandingPoint = trip.LandingPoint,
                 TakeOffPoint = trip.TakeOffPoint,
                 TripReference = trip.TripReference,
@@ -84,6 +85,7 @@ namespace BusManagementSystem.Repositories
                 BusId = trip.BusId,
                 BusModel = trip.Bus.Model,
                 BusRegistrationNumber = trip.Bus.RegistrationNumber,
+                AvailableSeat = trip.AvailableSeat,
                 LandingPoint = trip.LandingPoint,
                 TakeOffPoint = trip.TakeOffPoint,
                 TripReference = trip.TripReference,
@@ -111,7 +113,8 @@ namespace BusManagementSystem.Repositories
                 BusId = trip.BusId,
                 BusModel = trip.Bus.Model,
                 BusRegistrationNumber = trip.Bus.RegistrationNumber,
-                LandingPoint = trip.LandingPoint,
+               AvailableSeat = trip.AvailableSeat,
+               LandingPoint = trip.LandingPoint,
                 TakeOffPoint = trip.TakeOffPoint,
                 TripReference = trip.TripReference,
                 TakeOffTime = trip.TakeOffTime,
@@ -132,6 +135,7 @@ namespace BusManagementSystem.Repositories
                 BusId = trip.BusId,
                 BusModel = trip.Bus.Model,
                 BusRegistrationNumber = trip.Bus.RegistrationNumber,
+                AvailableSeat = trip.AvailableSeat,
                 LandingPoint = trip.LandingPoint,
                 TakeOffPoint = trip.TakeOffPoint,
                 TripReference = trip.TripReference,
@@ -155,6 +159,7 @@ namespace BusManagementSystem.Repositories
                 BusId = trip.BusId,
                 BusModel = trip.Bus.Model,
                 BusRegistrationNumber = trip.Bus.RegistrationNumber,
+                AvailableSeat = trip.AvailableSeat,
                 LandingPoint = trip.LandingPoint,
                 TakeOffPoint = trip.TakeOffPoint,
                 TripReference = trip.TripReference,
@@ -170,6 +175,27 @@ namespace BusManagementSystem.Repositories
         {
             //return _context.Trips.
             throw new NotImplementedException();
+        }
+
+        public List<TripDto> GetAvailableTrips(Location from, Location to, DateTime date)
+        {
+            return _context.Trips.Include(t => t.Bus).Include(t => t.Driver).Where(s => s.TakeOffPoint == from && s.LandingPoint == to && s.TakeOffTime.Date == date && s.AvailableSeat > 0).Select(trip => new TripDto
+            {
+                Id = trip.Id,
+                DriverId = trip.DriverId,
+                DriverFullName = $"{trip.Driver.FirstName} {trip.Driver.LastName}",
+                BusId = trip.BusId,
+                BusModel = trip.Bus.Model,
+                BusRegistrationNumber = trip.Bus.RegistrationNumber,
+                AvailableSeat = trip.AvailableSeat,
+                LandingPoint = trip.LandingPoint,
+                TakeOffPoint = trip.TakeOffPoint,
+                TripReference = trip.TripReference,
+                TakeOffTime = trip.TakeOffTime,
+                LandingTime = trip.LandingTime,
+                Status = trip.Status,
+                Price = trip.Price,
+            }).ToList();
         }
     }
 }
