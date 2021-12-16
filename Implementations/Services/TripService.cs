@@ -1,6 +1,7 @@
 ﻿using BusManagementSystem.DTOS;
 using BusManagementSystem.Entities;
 using BusManagementSystem.Enums;
+using BusManagementSystem.Exceptions;
 using BusManagementSystem.Interfaces.Services;
 using BusManagementSystem.Repositories;
 using System;
@@ -25,7 +26,12 @@ namespace BusManagementSystem.Services
 
         public void Delete(string tripReferenceNumber)
         {
-            throw new NotImplementedException();
+            var trip = _tripRepository.GetByReference(tripReferenceNumber);
+            if ( trip == null) 
+            {
+                throw new NotFoundException($"The trip reference number {tripReferenceNumber} not found");
+            }
+            _tripRepository.Delete(trip);
         }
 
         public TripDto Get(int id)
@@ -60,27 +66,42 @@ namespace BusManagementSystem.Services
 
         public List<TripDto> GetInitialisedTrips()
         {
-            throw new NotImplementedException();
+            return _tripRepository.GetInitialisedTrips();
         }
 
         public List<TripDto> GetTripsByBus(string registrationNumber)
         {
-            throw new NotImplementedException();
+            if (_busRepository.ExistByRegNumber(registrationNumber))
+            {
+                return _tripRepository.GetTripsByBus(registrationNumber);
+            }
+            else
+            {
+                throw new NotFoundException($"The Bus Registration Number{registrationNumber} entered does not exist.");
+            }
         }
 
         public List<TripDto> GetTripsByDate(DateTime date)
         {
-            throw new NotImplementedException();
+            return _tripRepository.GetTripsByDate(date);
         }
 
         public List<TripDto> GetTripsByDateAndLocation(Location from, Location to, DateTime date)
         {
-            throw new NotImplementedException();
+            return _tripRepository.GetTripsByDateAndLocation(from, to, date);
         }
 
         public List<TripDto> GetTripsByDriver(int driverId)
         {
-            throw new NotImplementedException();
+            var driver = _driverRepository.Get(driverId);
+            
+            if (driver == null)
+            {
+
+                throw new NotFoundException($"The driver Id {driverId} entered does not exist.");
+            }
+            return _tripRepository.GetTripsByDriver(driver.Id);
+            
         }
 
         public bool Schedule(CreateTripRequestModel model)

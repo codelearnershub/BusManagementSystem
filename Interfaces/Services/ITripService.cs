@@ -40,5 +40,7 @@ namespace BusManagementSystem.Interfaces.Services
         void Delete(string tripReferenceNumber);
 
         TripDto UpdateTripStatus(string tripReferenceNumber, TripStatus tripStatus);
+   
     }
+
 }

@@ -44,7 +44,15 @@ namespace BusManagementSystem
                 TakeOffTime = DateTime.Parse("2022-2-12 1:00:01"),
                 Price = 15000.00M
             };
-            tripService.Schedule(trip);
+            // tripService.Schedule(trip);
+            //tripService.Delete("4DC14AF45");
+
+            var trips = tripService.GetTripsByDate(DateTime.Parse("2022 - 02 - 12"));
+
+            foreach(var tr in trips)
+            {
+                Console.WriteLine($"{tr.BusModel} {tr.TripReference}");
+            }
         }
     }
 }

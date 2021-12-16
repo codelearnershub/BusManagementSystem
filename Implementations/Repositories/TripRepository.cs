@@ -1,6 +1,9 @@
 ﻿using BusManagementSystem.Context;
+using BusManagementSystem.DTOS;
 using BusManagementSystem.Entities;
+using BusManagementSystem.Enums;
 using BusManagementSystem.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,11 +54,122 @@ namespace BusManagementSystem.Repositories
             return _context.Trips.SingleOrDefault(x => x.TripReference == reference);
         }
 
+        public List<TripDto> GetTripsByDateAndLocation(Location from, Location to, DateTime date)
+        {
+            return _context.Trips.Include(t => t.Bus).Include(t=>t.Driver).Where(s => s.TakeOffPoint == from && s.LandingPoint == to && s.TakeOffTime.Date == date).Select(trip => new TripDto
+            {
+                Id = trip.Id,
+                DriverId = trip.DriverId,
+                DriverFullName = $"{trip.Driver.FirstName} {trip.Driver.LastName}",
+                BusId = trip.BusId,
+                BusModel = trip.Bus.Model,
+                BusRegistrationNumber = trip.Bus.RegistrationNumber,
+                LandingPoint = trip.LandingPoint,
+                TakeOffPoint = trip.TakeOffPoint,
+                TripReference = trip.TripReference,
+                TakeOffTime = trip.TakeOffTime,
+                LandingTime = trip.LandingTime,
+                Status = trip.Status,
+                Price = trip.Price,
+            }).ToList();
+        }
+
+        public List<TripDto> GetTripsByDriver(int driverId)
+        {
+            return _context.Trips.Include(t => t.Bus).Include(t => t.Driver).Where(x => x.DriverId == driverId).Select(trip => new TripDto
+            {
+                Id = trip.Id,
+                DriverId = trip.DriverId,
+                DriverFullName = $"{trip.Driver.FirstName} {trip.Driver.LastName}",
+                BusId = trip.BusId,
+                BusModel = trip.Bus.Model,
+                BusRegistrationNumber = trip.Bus.RegistrationNumber,
+                LandingPoint = trip.LandingPoint,
+                TakeOffPoint = trip.TakeOffPoint,
+                TripReference = trip.TripReference,
+                TakeOffTime = trip.TakeOffTime,
+                LandingTime = trip.LandingTime,
+                Status = trip.Status,
+                Price = trip.Price,
+            }).ToList();
+        }
+
         public Trip Update(Trip trip)
         {
             _context.Trips.Update(trip);
             _context.SaveChanges();
             return trip;
+        }
+
+        public List<TripDto> GetInitialisedTrips()
+        {
+           return _context.Trips.Include(t => t.Bus).Include(t => t.Driver).Where(x => x.Status == TripStatus.Initialize).Select(trip => new TripDto
+            {
+                Id = trip.Id,
+                DriverId = trip.DriverId,
+                DriverFullName = $"{trip.Driver.FirstName} {trip.Driver.LastName}",
+                BusId = trip.BusId,
+                BusModel = trip.Bus.Model,
+                BusRegistrationNumber = trip.Bus.RegistrationNumber,
+                LandingPoint = trip.LandingPoint,
+                TakeOffPoint = trip.TakeOffPoint,
+                TripReference = trip.TripReference,
+                TakeOffTime = trip.TakeOffTime,
+                LandingTime = trip.LandingTime,
+                Status = trip.Status,
+                Price = trip.Price,
+            }).ToList();
+            
+
+        }
+        public List<TripDto> GetTripsByBus(string registrationNumber)
+        {
+            var trips = _context.Trips.Include(r => r.Bus).Include(r => r.Driver).Where(r => r.Bus.RegistrationNumber == registrationNumber).Select(trip => new TripDto
+            {
+                Id = trip.Id,
+                DriverId = trip.DriverId,
+                DriverFullName = $"{trip.Driver.FirstName} {trip.Driver.LastName}",
+                BusId = trip.BusId,
+                BusModel = trip.Bus.Model,
+                BusRegistrationNumber = trip.Bus.RegistrationNumber,
+                LandingPoint = trip.LandingPoint,
+                TakeOffPoint = trip.TakeOffPoint,
+                TripReference = trip.TripReference,
+                TakeOffTime = trip.TakeOffTime,
+                LandingTime = trip.LandingTime,
+                Status = trip.Status,
+                Price = trip.Price,
+            }).ToList();
+            return trips;
+
+        }
+
+        public List<TripDto> GetTripsByDate(DateTime date)
+        {
+            var trips = _context.Trips.Include(t => t.Bus).Include(t => t.Driver).Where(r => r.TakeOffTime.Date == date).Select(trip => new TripDto
+
+            {
+                Id = trip.Id,
+                DriverId = trip.DriverId,
+                DriverFullName = $"{trip.Driver.FirstName} {trip.Driver.LastName}",
+                BusId = trip.BusId,
+                BusModel = trip.Bus.Model,
+                BusRegistrationNumber = trip.Bus.RegistrationNumber,
+                LandingPoint = trip.LandingPoint,
+                TakeOffPoint = trip.TakeOffPoint,
+                TripReference = trip.TripReference,
+                TakeOffTime = trip.TakeOffTime,
+                LandingTime = trip.LandingTime,
+                Status = trip.Status,
+                Price = trip.Price,
+            }).ToList();
+            return trips;
+        }
+
+        public List<TripDto> GetCompletedTrips()
+        {
+            //return _context.Trips.
+            throw new NotImplementedException();
         }
     }
 }
