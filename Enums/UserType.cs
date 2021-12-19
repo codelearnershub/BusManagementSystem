@@ -10,6 +10,7 @@ namespace BusManagementSystem.Enums
     {
         Admin = 1,
         Driver,
+        Passenger,
         Customer,
         Manager,
         Conductor
